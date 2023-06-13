@@ -1,4 +1,4 @@
-## 集成 react
+# weboack5 集成 react
 
 1. 安装相关包
 
@@ -46,7 +46,7 @@ const App = () => {
 export default App;
 ```
 
-### js 压缩配置
+## js 压缩配置
 
 react 打包后的 js 代码不会自动压缩, 需要手动配置
 
@@ -62,7 +62,7 @@ const config = {
 module.exports = config;
 ```
 
-### eslint 配置
+## eslint 配置
 
 webpack 配置和之前的没有什么不一样, 不过需要安装 `eslint-config-react-app -D`, 和修改`.eslintrc.js` 配置修
 
@@ -103,7 +103,7 @@ module.exports = {
 };
 ```
 
-### babel 配置
+## babel 配置
 
 webpack 配置, babel 需要处理 jsx 文件, 需要安装 `babel-preset-react-app` 和修改 `babel.config.js`
 
@@ -139,7 +139,7 @@ module.exports = {
 };
 ```
 
-### react 组件热更新
+## react 组件热更新
 
 只在开发环境使用, 首先需要安装:
 
@@ -172,4 +172,91 @@ const config = {
 };
 
 module.exports = config;
+```
+
+## 集成 antd
+
+1. 安装
+
+```
+yarn add antd
+```
+
+2. main.js 引入
+
+```js
+import "antd/dist/antd";
+```
+
+3. 使用
+
+```jsx
+import { Button } from "antd";
+<Button>测试</Button>;
+```
+
+4. 修改主题颜色
+
+antd 5 版本修改起来很简单, 文档 <https://ant.design/docs/react/customize-theme-cn>
+
+```jsx
+import { Button, ConfigProvider } from "antd";
+const App: React.FC = () => (
+  <ConfigProvider theme={{ token: { colorPrimary: "#00b96b" } }}>
+    <Button />
+  </ConfigProvider>
+);
+```
+
+antd5,还可以针对某一个组件修改主题:
+
+```jsx
+<ConfigProvider theme={{ components: { Radio: { colorPrimary: "#00b96b" } } }}>
+  <Radio>Radio</Radio>
+  <Checkbox>Checkbox</Checkbox>
+</ConfigProvider>
+```
+
+## 打包分组
+
+如果页面引入很多第三方包, 例如 react react-dom react-router-dom antd 等等, 那么打包出来的文件就会很大, 这时候可以使用如下方法进行分组:
+
+```javascript
+const config = {
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        // react react-dom react-router-dom
+        react: {
+          test: /[\\/]node_modules[\\/]react(.*)?[\\/]/,
+          name: "chunk-react",
+          priority: 10,
+        },
+        // antd-design
+        antd: {
+          test: /[\\/]node_modules[\\/]antd(.*)?[\\/]/,
+          name: "chunk-antd",
+          priority: 9,
+        },
+        // 剩下的 node_modules
+        libs: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "chunk-libs",
+          priority: 8,
+        },
+      },
+    },
+  },
+};
+```
+
+打包后的结果:
+
+```
+js/runtime~main.js.1b17003f8c.js
+js/chunk-react.8e1ab83a56.js
+js/chunk-antd.c9f2dc20ff.js
+js/chunk-libs.f170381f60.js
+js/main.5967e94206.js
 ```
