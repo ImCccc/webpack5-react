@@ -2,6 +2,12 @@
   webpack 相关:
   yarn add webpack webpack-cli -D
 
+  react相关:
+  yarn add react react-dom react-router-dom
+
+  antd:
+  yarn add antd
+
   html插件:
   yarn add html-webpack-plugin -D
   
@@ -24,7 +30,7 @@
   yarn add @pmmmwh/react-refresh-webpack-plugin react-refresh -D
 
   开发服务器:
-  yarn add webpack-dev-server -D
+  yarn add webpack-dev-server cross-env -D
 */
 
 const CopyWebpackPlugin = require("copy-webpack-plugin");
